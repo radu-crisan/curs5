@@ -1,51 +1,55 @@
 function setup() {
-    createCanvas(400, 400)
+  createCanvas(400, 400)
 }
 
-let xSmilyFace = 200
-let xSmilyFaceSens = 1;
-let ySmilyFace = 300
-let ySmilyFaceSens = 1;
-let raySmilyFace = 50; 
-let stepSmilyFace = 3
+const smileyFace1 = { x: 200, y: 300, sensX: 1, sensY: 1, ray: 10, step:3 }
+const smileyFace2 = { x: 300, y: 300, sensX: 1, sensY: 1, ray: 25, step:2 }
+const smileyFace3 = { x: 350, y: 300, sensX: -1, sensY: 1, ray: 15, step:4 }
 
 function draw() {
-    background("#eeeeee")
+  background("#eeeeee")
 
-    xSmilyFace += stepSmilyFace * xSmilyFaceSens
-    if (xSmilyFace > 400 - raySmilyFace || xSmilyFace < 0 + raySmilyFace) {
-        xSmilyFaceSens = -1 * xSmilyFaceSens
-    }
-
-    ySmilyFace += stepSmilyFace * ySmilyFaceSens
-    if (ySmilyFace > 400 - raySmilyFace || ySmilyFace < 0 + raySmilyFace) {
-        ySmilyFaceSens = -1 * ySmilyFaceSens
-    }
-
-    smileyFace(xSmilyFace, ySmilyFace, raySmilyFace);
-
+  smileyFace(smileyFace1)
+  smileyFace(smileyFace2)
+  smileyFace(smileyFace3)
 }
 
+function smileyFace(smObject) {
+  smileyFaceCheck(smObject)
+  smileyFaceDraw(smObject)
+}
 
-function smileyFace(x, y, ray) {
-    let diameter = ray*2
-    fill("yellow")
-    circle(x, y, diameter)
+function smileyFaceCheck(smObject) {
+  smObject.x += smObject.step * smObject.sensX
+  if (smObject.x > 400 - smObject.ray || smObject.x < 0 + smObject.ray) {
+    smObject.sensX = -1 * smObject.sensX
+  }
 
-    // Ochiul stang
-    circle(x-20, y-20, 20)
-    fill("blue")
-    circle(x-20, y-20, 10)
+  smObject.y += smObject.step * smObject.sensY
+  if (smObject.y > 400 - smObject.ray || smObject.y < 0 + smObject.ray) {
+    smObject.sensY = -1 * smObject.sensY
+  }
+}
 
-    // Ochiul drept
-    fill("yellow")
-    circle(x+20, y-20, 20)
-    fill("blue")
-    circle(x+20, y-20, 10)
+function smileyFaceDraw(smObject) {
+  let diameter = smObject.ray * 2
+  fill("yellow")
+  circle(smObject.x, smObject.y, diameter)
 
-    // Gura
-    fill("black")
-    arc(x, y+10, 50, 40, 0, Math.PI)
-    fill("red")
-    arc(x, y+20, 20, 30, 0, Math.PI)
+  // Ochiul stang
+  circle(smObject.x - diameter / 5, smObject.y - diameter / 5, diameter / 5)
+  fill("blue")
+  circle(smObject.x - diameter / 5, smObject.y - diameter / 5, diameter / 10)
+
+  // Ochiul drept
+  fill("yellow")
+  circle(smObject.x + diameter / 5, smObject.y - diameter / 5, diameter / 5)
+  fill("blue")
+  circle(smObject.x + diameter / 5, smObject.y - diameter / 5, diameter / 10)
+
+  // Gura
+  fill("black")
+  arc(smObject.x, smObject.y + diameter / 10, diameter / 2, diameter / (5 / 2), 0, Math.PI)
+  fill("red")
+  arc(smObject.x, smObject.y + diameter / 5, diameter / 5, diameter / (10 / 3), 0, Math.PI)
 }
